@@ -18,7 +18,13 @@ authRouter.post('/signup', async (req, res, next) => {
     });
     const savedUser = await user.save();
     const token = await savedUser.getJWT();
-    res.cookie('token', token, { expires: new Date(Date.now() + 8 * 3600000) });
+    console.log('Generated Token:', token); // Add this line in both login and signup routes
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Ensure it is true when in production
+      sameSite: 'Strict', // Adjust based on your needs
+      expires: new Date(Date.now() + 8 * 3600000), // Cookie expiration
+    });
     res.json({ message: 'User created successfully', data: savedUser });
   } catch (err) {
     res.status(400).send('Error: ' + err.message);
@@ -35,13 +41,17 @@ authRouter.post('/login', async (req, res) => {
     }
     const user = await User.findOne({ emailId: emailId });
     if (!user) {
-      throw new Error('user not found, try signup instead!!');
+      throw new Error('User not found, try signup instead!!');
     }
     const isPasswordValid = await user.validatePassword(password);
     if (isPasswordValid) {
       const token = await user.getJWT();
+      console.log('Generated Token:', token); // Add this line in both login and signup routes
       res.cookie('token', token, {
-        expires: new Date(Date.now() + 8 * 3600000),
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production', // Ensure it is true when in production
+        sameSite: 'Strict', // Adjust based on your needs
+        expires: new Date(Date.now() + 8 * 3600000), // Cookie expiration
       });
       res.send(user);
     } else {
@@ -53,8 +63,13 @@ authRouter.post('/login', async (req, res) => {
 });
 
 authRouter.post('/logout', async (req, res) => {
-  res.cookie('token', null, { expires: new Date(Date.now()) });
-  res.send('User logged out sucessfully');
+  res.cookie('token', '', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'Strict',
+    expires: new Date(0), // Expire the cookie immediately
+  });
+  res.send('User logged out successfully');
 });
 
 module.exports = authRouter;
