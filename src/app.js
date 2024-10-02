@@ -3,6 +3,7 @@ const connectDB = require('./config/database');
 const app = express();
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+require('dotenv').config();
 
 app.use(
   cors({
@@ -29,10 +30,12 @@ app.use('/', profileRouter);
 app.use('/', requestRouter);
 app.use('/', userRouter);
 
+const PORT = process.env.PORT || 3000;
+
 connectDB()
   .then(() => {
     console.log('Connected to database devConnect');
-    app.listen(3000, () => {
+    app.listen(PORT, () => {
       console.log('Listening...');
     });
   })
