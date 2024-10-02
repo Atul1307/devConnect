@@ -36,11 +36,9 @@ connectDB()
   .then(() => {
     console.log('Connected to database devConnect');
     app.listen(PORT, () => {
-      console.log('Listening...');
+      console.log('Listening on PORT : ' + PORT);
     });
   })
   .catch((err) => {
-    console.log(
-      'Connection failed to cluster, you did something wrong Bugger!!'
-    );
+    console.log('Connection failed to cluster, you did something wrong!!');
   });
