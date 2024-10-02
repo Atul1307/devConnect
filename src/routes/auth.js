@@ -18,7 +18,7 @@ authRouter.post('/signup', async (req, res, next) => {
     });
     const savedUser = await user.save();
     const token = await savedUser.getJWT();
-    console.log('Generated Token:', token); // Add this line in both login and signup routes
+    console.log('Generated Token for signup:', token); // Add this line in both login and signup routes
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production', // Ensure it is true when in production
@@ -46,11 +46,11 @@ authRouter.post('/login', async (req, res) => {
     const isPasswordValid = await user.validatePassword(password);
     if (isPasswordValid) {
       const token = await user.getJWT();
-      console.log('Generated Token:', token); // Add this line in both login and signup routes
+      console.log('Generated Token for login:', token); // Add this line in both login and signup routes
       res.cookie('token', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production', // Ensure it is true when in production
-        sameSite: 'Strict', // Adjust based on your needs
+        sameSite: 'None', // Adjust based on your needs
         expires: new Date(Date.now() + 8 * 3600000), // Cookie expiration
       });
       res.send(user);
