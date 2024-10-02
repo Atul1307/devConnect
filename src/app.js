@@ -12,13 +12,8 @@ app.use(
     credentials: true,
   })
 );
-
 app.use(express.json());
 app.use(cookieParser());
-
-app.patch('/test-cors', (req, res) => {
-  res.json({ message: 'CORS test successful!' });
-});
 
 const authRouter = require('./routes/auth');
 const profileRouter = require('./routes/profile');
