@@ -18,12 +18,11 @@ authRouter.post('/signup', async (req, res, next) => {
     });
     const savedUser = await user.save();
     const token = await savedUser.getJWT();
-    console.log('Generated Token for signup:', token); // Add this line in both login and signup routes
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // Ensure it is true when in production
-      sameSite: 'Strict', // Adjust based on your needs
-      expires: new Date(Date.now() + 8 * 3600000), // Cookie expiration
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'Strict',
+      expires: new Date(Date.now() + 8 * 3600000),
     });
     res.json({ message: 'User created successfully', data: savedUser });
   } catch (err) {
@@ -46,12 +45,11 @@ authRouter.post('/login', async (req, res) => {
     const isPasswordValid = await user.validatePassword(password);
     if (isPasswordValid) {
       const token = await user.getJWT();
-      console.log('Generated Token for login:', token); // Add this line in both login and signup routes
       res.cookie('token', token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production', // Ensure it is true when in production
-        sameSite: 'None', // Adjust based on your needs
-        expires: new Date(Date.now() + 8 * 3600000), // Cookie expiration
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'None',
+        expires: new Date(Date.now() + 8 * 3600000),
       });
       res.send(user);
     } else {
@@ -67,7 +65,7 @@ authRouter.post('/logout', async (req, res) => {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'Strict',
-    expires: new Date(0), // Expire the cookie immediately
+    expires: new Date(0),
   });
   res.send('User logged out successfully');
 });
