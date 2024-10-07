@@ -7,7 +7,7 @@ require('dotenv').config();
 
 app.use(
   cors({
-    origin: 'https://devconnectsocial.netlify.app/',
+    origin: 'https://devconnectsocial.netlify.app',
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true,
   })
