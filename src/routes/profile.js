@@ -5,15 +5,6 @@ const { userAuth } = require('../middleware/auth.js');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
 
-profileRouter.get('/user', async (req, res) => {
-  const userDetails = await User.find({ emailId: 'Rohit@sharma.com' });
-  try {
-    res.send(userDetails);
-  } catch (err) {
-    res.status(404).send('User not found');
-  }
-});
-
 profileRouter.get('/profile/view', userAuth, async (req, res) => {
   try {
     const user = req.user;
